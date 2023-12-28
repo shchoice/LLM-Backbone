@@ -8,17 +8,17 @@ from transformers import (
     BitsAndBytesConfig
 )
 
-from config.lora_config import LoraConfiguration
-from config.model_config import ModelConfig
-from config.quantization_config import QuantizationConfig
-from config.tokenizer_config import TokenizerConfig
-from config.train_config import TrainingConfig
-from config.trainer_logging__config import TrainerLoggingConfig
+from config.models.lora_config import LoraConfiguration
+from config.models.model_config import ModelConfig
+from config.models.quantization_config import QuantizationConfig
+from config.training.tokenizer_config import TokenizerConfig
+from config.training.training_config import TrainingConfig
+from config.training.training_logging_config import TrainingLoggingConfig
 
 
 class ModelLoader:
     def __init__(self, model_config: ModelConfig,
-                 trainer_logging_config: TrainerLoggingConfig,
+                 trainer_logging_config: TrainingLoggingConfig,
                  training_config: TrainingConfig,
                  quantization_config: QuantizationConfig,
                  lora_config: LoraConfiguration,
@@ -118,7 +118,7 @@ class ModelLoader:
 
     def get_device_map(self):
         print(f"num_gpus: {torch.cuda.device_count()}")
-        world_size = int(os.environ.get("WORLD_SIZE", 1))
+        world_size = int(os.environ.get("WORLD_SIZE", torch.cuda.device_count()))
         print(f"world_size: {world_size}")
         self.ddp = world_size != 1
         if self.ddp:
@@ -129,8 +129,6 @@ class ModelLoader:
             print(f"ddp is on - gradient_accumulation_steps: {self.gradient_accumulation_steps}")
         else:
             device_map = "auto"
-            self.gradient_accumulation_steps = 1
-
             print("ddp is off")
 
         return device_map

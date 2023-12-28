@@ -8,7 +8,7 @@ EXPT_NAME="exp"                         # Example experiment name
 CACHE_DIR="./cache"                     # Cache directory
 OUTPUT_DIR="./output"                   # Output directory
 LOGGING_DIR="./logs"                    # Logging directory
-REPORT_TO="['mlflow', 'tensorboard']"   # Reporting tools
+REPORT_TO="mlflow,tensorboard"          # Reporting tools
 
 NUM_TRAIN_EPOCHS=10                     # Number of training epochs
 TRAIN_BATCH_SIZE=256                    # Training batch size
@@ -22,7 +22,7 @@ LR_SCHEDULER_TYPE="cosine"              # LR scheduler type
 OPTIM="adamw_torch"                     # Optimizer type
 WARMUP_RATIO=0.1                        # Warmup ratio
 WEIGHT_DECAY=0.01                       # Weight decay
-GRADIENT_ACCUMULATION_STEPS=1           # Gradient accumulation steps
+GRADIENT_ACCUMULATION_STEPS=4           # Gradient accumulation steps
 LOAD_BEST_MODEL_AT_END=true             # Load best model at end
 FP16=true                               # Use fp16
 DDP_FIND_UNUSED_PARAMETERS=false        # DDP find unused parameters

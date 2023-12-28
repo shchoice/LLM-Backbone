@@ -7,26 +7,23 @@ from transformers import (
 )
 
 from config.config_builder import ConfigBuilder
-from config.lora_config import LoraConfiguration
-from config.model_config import ModelConfig
-from config.quantization_config import QuantizationConfig
-from config.tokenizer_config import TokenizerConfig
-from config.train_config import TrainingConfig
-from config.trainer_logging__config import TrainerLoggingConfig
+from config.models.lora_config import LoraConfiguration
+from config.models.model_config import ModelConfig
+from config.models.quantization_config import QuantizationConfig
+from config.training.tokenizer_config import TokenizerConfig
+from config.training.training_config import TrainingConfig
+from config.training.training_logging_config import TrainingLoggingConfig
 from config.arguments import Arguments
-from config.training_config_manager import TrainerConfigManager
-from data_loader import DataLoader
-from environment_manager import EnvironmentManager
-from model_loader import ModelLoader
-import mlflow
-import os
+from config.training.training_config_manager import TrainingConfigManager
+from data.data_loader import DataLoader
+from utils.experiment_datetime_utils import ExperimentDatetimeUtils
+from utils.os_environment_utils import OSEnvironmentUtils
+from models.model_loader import ModelLoader
 
-os.environ['MLFLOW_EXPERIMENT_NAME']="test"
-os.environ['MLFLOW_FLATTEN_PARAMS']='1'
 
 class QuestionAndAnsweringService:
     def __init__(self, model_config: ModelConfig,
-                 trainer_logging_config: TrainerLoggingConfig,
+                 trainer_logging_config: TrainingLoggingConfig,
                  training_config: TrainingConfig,
                  quantization_config: QuantizationConfig,
                  lora_config: LoraConfiguration,
@@ -47,7 +44,7 @@ class QuestionAndAnsweringService:
         total_samples = len(self.data_loader.dataset)
         training_config.set_warmup_steps(total_samples)
 
-        self.training_arguments_manager = TrainerConfigManager(
+        self.training_arguments_manager = TrainingConfigManager(
             model_name= model_config.model_name,
             training_logging_config=trainer_logging_config,
             training_config=training_config
@@ -57,6 +54,12 @@ class QuestionAndAnsweringService:
         self.tokenizer = None
         self.dataset = None
         self.early_stopping_patience = training_config.early_stopping_patience
+        datetime = ExperimentDatetimeUtils.get_experiment_datetime()
+        OSEnvironmentUtils.set_mlflow_env(
+            expt_name=trainer_logging_config.expt_name,
+            model_name=model_config.model_name,
+            datetime=datetime
+        )
 
     def setup(self):
         self.model = self.model_loader.load_model()
@@ -148,36 +151,66 @@ def setup_training_environment(args):
         )
     return config_builder.build()
 
-def print_training_environment(training_environment):
-    print(training_environment.model_config)
-    print(training_environment.trainer_logging_config)
-    print(training_environment.training_config)
-    print(training_environment.quantization_config)
-    print(training_environment.lora_config)
-    print(training_environment.tokenizer_config)
 
+def print_training_environment(
+        model_config: ModelConfig,
+        trainer_logging_config: TrainingLoggingConfig,
+        training_config: TrainingConfig,
+        quantization_config: QuantizationConfig,
+        lora_config = LoraConfiguration,
+        tokenizer_config = TokenizerConfig):
+    print(model_config)
+    print(trainer_logging_config)
+    print(training_config)
+    print(quantization_config)
+    print(lora_config)
+    print(tokenizer_config)
 
-if __name__ == '__main__':
-    EnvironmentManager.set_environment_variables()
+def get_debug_arguments():
+    test_args = ['--model_name', 'koalpaca-12.8B',
+                 '--dataset', 'KorQuAD-v1',
+                 '--prompt_name', 'A'
+                 ]
+    sys.argv.extend(test_args)
 
-    if len(sys.argv) == 1:  # 디버깅 환경에서 사용할 경우(파라미터가 제공되지 않은 경우)
-        test_args = ['--model_name', 'koalpaca-12.8B',
-                     '--dataset', 'KorQuAD-v1',
-                     '--prompt_name', 'A'
-                     ]
-        sys.argv.extend(test_args)  # 테스트 인자 추가
-
+def get_experiment_arguments():
     args = Arguments.get_train_parse_arguments()
     training_environment = setup_training_environment(args=args)
-    print_training_environment(training_environment=training_environment)
+
+    model_config = training_environment.model_config
+    trainer_logging_config = training_environment.trainer_logging_config
+    training_config = training_environment.training_config
+    quantization_config = training_environment.quantization_config
+    lora_config = training_environment.lora_config
+    tokenizer_config = training_environment.tokenizer_config
+
+    print_training_environment(
+        model_config=model_config,
+        trainer_logging_config=trainer_logging_config,
+        training_config=training_config,
+        quantization_config=quantization_config,
+        lora_config=lora_config,
+        tokenizer_config=tokenizer_config,
+    )
+
+    return model_config, trainer_logging_config, training_config, quantization_config, lora_config, tokenizer_config
+
+if __name__ == '__main__':
+    OSEnvironmentUtils.get_cpu_env()
+
+    if len(sys.argv) == 1:  # 디버깅 환경에서 사용할 경우(파라미터가 제공되지 않은 경우)
+        get_debug_arguments()
+
+    model_config, trainer_logging_config, training_config, quantization_config, lora_config, tokenizer_config = \
+        get_experiment_arguments()
 
     qa_service = QuestionAndAnsweringService(
-        model_config=training_environment.model_config,
-        trainer_logging_config=training_environment.trainer_logging_config,
-        training_config=training_environment.training_config,
-        quantization_config=training_environment.quantization_config,
-        lora_config=training_environment.lora_config,
-        tokenizer_config=training_environment.tokenizer_config
+        model_config=model_config,
+        trainer_logging_config=trainer_logging_config,
+        training_config=training_config,
+        quantization_config=quantization_config,
+        lora_config=lora_config,
+        tokenizer_config=tokenizer_config,
     )
     qa_service.setup()
     qa_service.train()

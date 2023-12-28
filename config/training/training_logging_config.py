@@ -1,7 +1,7 @@
 from utils.directory_utils import DirectoryUtils
 
 
-class TrainerLoggingConfig:
+class TrainingLoggingConfig:
     def __init__(self, expt_name, cache_dir, output_dir, logging_dir, report_to):
         self.expt_name = expt_name
         self.cache_dir = DirectoryUtils.get_cache_dir(cache_dir=cache_dir)

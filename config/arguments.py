@@ -37,7 +37,7 @@ class Arguments:
         parser.add_argument('--optim', type=str, default='adamw_torch', choices=['adamw_torch', 'paged_adamw_8bit'], help='Optimizer type')
         parser.add_argument('--warmup_ratio', type=float, default=0.1, help='Warmup ratio for learning rate scheduler')
         parser.add_argument('--weight_decay', type=float, default=0.01, help='Weight decay for the optimizer')
-        parser.add_argument('--gradient_accumulation_steps', type=int, default=2, help='Gradient accumulation steps')
+        parser.add_argument('--gradient_accumulation_steps', type=int, default=4, help='Gradient accumulation steps')
         parser.add_argument('--load_best_model_at_end', type=bool, default=True, help='Load best model at end of training')
         parser.add_argument('--fp16', type=bool, default=True, help='Whether to use fp16 (mixed) precision instead of 32-bit')
         parser.add_argument('--ddp_find_unused_parameters', type=bool, default=False, help='When using distributed training, the value of the flag `find_unused_parameters` passed to DistributedDataParallel')

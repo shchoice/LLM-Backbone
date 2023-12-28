@@ -1,7 +1,6 @@
 from datasets import load_dataset
 
-from prompt_loader import PromptLoader
-from utils.directory_utils import DirectoryUtils
+from prompts.prompt_loader import PromptLoader
 
 
 class DataLoader:

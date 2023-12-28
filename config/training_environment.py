@@ -1,16 +1,15 @@
-# Product 클래스 정의 (최종 객체)
-from config.lora_config import LoraConfiguration
-from config.model_config import ModelConfig
-from config.quantization_config import QuantizationConfig
-from config.tokenizer_config import TokenizerConfig
-from config.train_config import TrainingConfig
-from config.trainer_logging__config import TrainerLoggingConfig
+from config.models.lora_config import LoraConfiguration
+from config.models.model_config import ModelConfig
+from config.models.quantization_config import QuantizationConfig
+from config.training.tokenizer_config import TokenizerConfig
+from config.training.training_config import TrainingConfig
+from config.training.training_logging_config import TrainingLoggingConfig
 
 
 class TrainingEnvironment:
     def __init__(self,
                  model_config: ModelConfig,
-                 trainer_logging_config: TrainerLoggingConfig,
+                 trainer_logging_config: TrainingLoggingConfig,
                  training_config: TrainingConfig,
                  quantization_config: QuantizationConfig,
                  lora_config: LoraConfiguration,
