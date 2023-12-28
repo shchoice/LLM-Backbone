@@ -19,7 +19,7 @@ class Arguments:
 
         # About a Log
         parser.add_argument('--expt_name', type=str, default='exp', help='Experiment name for output directory')
-        parser.add_argument('--cache_dir', type=str, default='./cache', help='Cache directory for storing models and data')
+        parser.add_argument('--cache_dir', type=str, default='.cache', help='Cache directory for storing models and data')
         parser.add_argument('--output_dir', type=str, default='output', help='Output directory path')
         parser.add_argument('--logging_dir', type=str, default='logging', help='Logging directory path')
         parser.add_argument('--report_to', type=parse_list, default='mlflow,tensorboard', help='Report the results and logs')
@@ -65,6 +65,10 @@ class Arguments:
         parser.add_argument('--return_overflowing_tokens', type=bool, default=True, help='Return overflowing token information')
         parser.add_argument('--return_length', type=bool, default=True, help='Return length of the encoded inputs')
         parser.add_argument('--padding', type=bool, default=True, help='Enable padding to the maximum sequence length')
+
+        # For MLFLOW
+        parser.add_argument('--mlflow_tracking_uri', type=str, default='localhost', help='URI of MLFlow installed')
+        parser.add_argument('--mlflow_port', type=str, default='55000', help='Port of MLFlow installed')
 
         return parser.parse_args()
 

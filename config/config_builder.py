@@ -1,3 +1,4 @@
+from config.mlops.mlflow_config import MLFlowConfig
 from config.training_environment import TrainingEnvironment
 from config.models.lora_config import LoraConfiguration
 from config.models.model_config import ModelConfig
@@ -19,6 +20,7 @@ class ConfigBuilder:
         self.quantization_config = None
         self.lora_config = None
         self.tokenizer_config = None
+        self.mlflow_config = None
 
     def set_model_config(self, **kwargs):
         self.model_config = ModelConfig(**kwargs)
@@ -44,6 +46,9 @@ class ConfigBuilder:
         self.tokenizer_config = TokenizerConfig(**kwargs)
         return self
 
+    def set_mlflow_config(self, **kwargs):
+        self.mlflow_config = MLFlowConfig(**kwargs)
+
     def build(self):
         environment = TrainingEnvironment(
             self.model_config,
@@ -51,7 +56,8 @@ class ConfigBuilder:
             self.training_config,
             self.quantization_config,
             self.lora_config,
-            self.tokenizer_config
+            self.tokenizer_config,
+            self.mlflow_config,
         )
         self.reset()  # 다음 빌드를 위해 리셋
 

@@ -1,4 +1,4 @@
-class QuantizationConfig():
+class QuantizationConfig:
     def __init__(self, load_in_4bit, bnb_4bit_quant_type, bnb_4bit_compute_dtype, bnb_4bit_use_double_quant):
         self.load_in_4bit = load_in_4bit
         self.bnb_4bit_quant_type = bnb_4bit_quant_type

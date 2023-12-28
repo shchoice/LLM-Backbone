@@ -8,7 +8,7 @@ class DirectoryUtils:
     @staticmethod
     def get_base_path():
         current_file = os.path.abspath(__file__)
-        base_dir = os.path.dirname(current_file)
+        base_dir = os.path.dirname(os.path.dirname(current_file))
 
         return base_dir
 

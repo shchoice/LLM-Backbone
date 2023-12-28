@@ -49,10 +49,12 @@ class ModelLoader:
             bnb_4bit_quant_type=self.quantization_config.bnb_4bit_quant_type,
             bnb_4bit_compute_dtype=self.get_torch_dtype(self.quantization_config.bnb_4bit_compute_dtype)
         )
+
         model = AutoModelForCausalLM.from_pretrained(
             self.model_name,
             quantization_config=bnb_config,
             device_map=self.get_device_map(),
+            cache_dir=self.cache_dir
         )
 
         self.print_trainable_parameters(model)

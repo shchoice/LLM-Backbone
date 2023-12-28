@@ -7,6 +7,7 @@ from transformers import (
 )
 
 from config.config_builder import ConfigBuilder
+from config.mlops.mlflow_config import MLFlowConfig
 from config.models.lora_config import LoraConfiguration
 from config.models.model_config import ModelConfig
 from config.models.quantization_config import QuantizationConfig
@@ -27,7 +28,8 @@ class QuestionAndAnsweringService:
                  training_config: TrainingConfig,
                  quantization_config: QuantizationConfig,
                  lora_config: LoraConfiguration,
-                 tokenizer_config: TokenizerConfig):
+                 tokenizer_config: TokenizerConfig,
+                 mlflow_config: MLFlowConfig):
         self.model_loader = ModelLoader(
             model_config=model_config,
             trainer_logging_config=trainer_logging_config,
@@ -58,7 +60,9 @@ class QuestionAndAnsweringService:
         OSEnvironmentUtils.set_mlflow_env(
             expt_name=trainer_logging_config.expt_name,
             model_name=model_config.model_name,
-            datetime=datetime
+            datetime=datetime,
+            mlflow_tracking_uri=mlflow_config.mlflow_tracking_uri,
+            mlflow_port=mlflow_config.mlflow_port,
         )
 
     def setup(self):
@@ -148,6 +152,10 @@ def setup_training_environment(args):
             return_overflowing_tokens=args.return_overflowing_tokens,
             return_length=args.return_length,
             padding=args.padding
+        ) \
+        .set_mlflow_config(
+            mlflow_tracking_uri=args.mlflow_tracking_uri,
+            mlflow_port=args.mlflow_port
         )
     return config_builder.build()
 
@@ -158,13 +166,15 @@ def print_training_environment(
         training_config: TrainingConfig,
         quantization_config: QuantizationConfig,
         lora_config = LoraConfiguration,
-        tokenizer_config = TokenizerConfig):
+        tokenizer_config = TokenizerConfig,
+        mlflow_config = MLFlowConfig):
     print(model_config)
     print(trainer_logging_config)
     print(training_config)
     print(quantization_config)
     print(lora_config)
     print(tokenizer_config)
+    print(mlflow_config)
 
 def get_debug_arguments():
     test_args = ['--model_name', 'koalpaca-12.8B',
@@ -183,6 +193,7 @@ def get_experiment_arguments():
     quantization_config = training_environment.quantization_config
     lora_config = training_environment.lora_config
     tokenizer_config = training_environment.tokenizer_config
+    mlflow_config = training_environment.mlflow_config
 
     print_training_environment(
         model_config=model_config,
@@ -191,9 +202,11 @@ def get_experiment_arguments():
         quantization_config=quantization_config,
         lora_config=lora_config,
         tokenizer_config=tokenizer_config,
+        mlflow_config=mlflow_config
     )
 
-    return model_config, trainer_logging_config, training_config, quantization_config, lora_config, tokenizer_config
+    return model_config, trainer_logging_config, training_config, \
+        quantization_config, lora_config, tokenizer_config, mlflow_config
 
 if __name__ == '__main__':
     OSEnvironmentUtils.get_cpu_env()
@@ -201,8 +214,8 @@ if __name__ == '__main__':
     if len(sys.argv) == 1:  # 디버깅 환경에서 사용할 경우(파라미터가 제공되지 않은 경우)
         get_debug_arguments()
 
-    model_config, trainer_logging_config, training_config, quantization_config, lora_config, tokenizer_config = \
-        get_experiment_arguments()
+    model_config, trainer_logging_config, training_config, quantization_config, lora_config, tokenizer_config, \
+        mlflow_config = get_experiment_arguments()
 
     qa_service = QuestionAndAnsweringService(
         model_config=model_config,
@@ -211,6 +224,7 @@ if __name__ == '__main__':
         quantization_config=quantization_config,
         lora_config=lora_config,
         tokenizer_config=tokenizer_config,
+        mlflow_config=mlflow_config,
     )
     qa_service.setup()
     qa_service.train()

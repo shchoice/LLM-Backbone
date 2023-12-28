@@ -1,3 +1,4 @@
+from config.mlops.mlflow_config import MLFlowConfig
 from config.models.lora_config import LoraConfiguration
 from config.models.model_config import ModelConfig
 from config.models.quantization_config import QuantizationConfig
@@ -13,10 +14,12 @@ class TrainingEnvironment:
                  training_config: TrainingConfig,
                  quantization_config: QuantizationConfig,
                  lora_config: LoraConfiguration,
-                 tokenizer_config: TokenizerConfig):
+                 tokenizer_config: TokenizerConfig,
+                 mlflow_config: MLFlowConfig):
         self.model_config = model_config
         self.trainer_logging_config = trainer_logging_config
         self.training_config = training_config
         self.quantization_config = quantization_config
         self.lora_config = lora_config
         self.tokenizer_config = tokenizer_config
+        self.mlflow_config = mlflow_config
