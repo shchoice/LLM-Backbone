@@ -64,7 +64,7 @@ class ModelLoader:
         config = LoraConfig(
             r=self.lora_config.r,
             lora_alpha=self.lora_config.lora_alpha,
-            target_modules=[self.lora_config.target_modules],
+            target_modules=self.lora_config.target_modules,
             fan_in_fan_out=self.lora_config.fan_in_fan_out,
             lora_dropout=self.lora_config.lora_dropout,
             inference_mode=self.lora_config.inference_mode,

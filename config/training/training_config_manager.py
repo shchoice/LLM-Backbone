@@ -19,6 +19,7 @@ class TrainingConfigManager:
         self.logging_dir = DirectoryUtils.get_logging_dir(
             model_name=self.model_name,
             expt_name=self.training_logging_config.expt_name,
+            output_dir=self.training_logging_config.output_dir,
             logging_dir=self.training_logging_config.logging_dir
         )
 

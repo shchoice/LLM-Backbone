@@ -21,28 +21,29 @@ class DirectoryUtils:
 
     @staticmethod
     def get_output_dir(model_name, expt_name, output_dir):
-        # Expect: OUTPUT_DIR = f'./{MODEL_NAME}/output/{EXPT_NAME}/{datetime.now().strftime("%y%m%d_%H%M")}'
+        # Expect: OUTPUT_DIR = f'./output/{MODEL_NAME}/{EXPT_NAME}_{datetime.now().strftime("%y%m%d_%H%M")}'
         base_dir = DirectoryUtils.get_base_path()
         date = ExperimentDatetimeUtils.get_experiment_datetime()
         output_dir = os.path.join(
             base_dir,
-            model_name,
             output_dir,
-            expt_name + date,
+            model_name,
+            expt_name + '_' + date,
         )
 
         return output_dir
 
     @staticmethod
-    def get_logging_dir(model_name, expt_name, logging_dir):
-        # Expect: LOGGING_DIR = f'./{MODEL_NAME}/logging/{EXPT_NAME}/{datetime.now().strftime("%y%m%d_%H%M")}'
+    def get_logging_dir(model_name, expt_name, output_dir, logging_dir):
+        # Expect: LOGGING_DIR = f'./output/{MODEL_NAME}/{EXPT_NAME}_{datetime.now().strftime("%y%m%d_%H%M")/logging}'
         base_dir = DirectoryUtils.get_base_path()
         date = ExperimentDatetimeUtils.get_experiment_datetime()
         logging_dir = os.path.join(
             base_dir,
+            output_dir,
             model_name,
-            logging_dir,
-            expt_name + date,
+            expt_name + '_' + date,
+            logging_dir
         )
 
         return logging_dir

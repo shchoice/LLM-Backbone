@@ -62,7 +62,6 @@ class QuestionAndAnsweringService:
             model_name=model_config.model_name,
             datetime=datetime,
             mlflow_tracking_uri=mlflow_config.mlflow_tracking_uri,
-            mlflow_port=mlflow_config.mlflow_port,
         )
 
     def setup(self):
@@ -155,7 +154,6 @@ def setup_training_environment(args):
         ) \
         .set_mlflow_config(
             mlflow_tracking_uri=args.mlflow_tracking_uri,
-            mlflow_port=args.mlflow_port
         )
     return config_builder.build()
 
