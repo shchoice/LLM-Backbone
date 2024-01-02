@@ -40,7 +40,7 @@ class QuestionAndAnsweringService:
         )
         self.data_loader = DataLoader(
             dataset=model_config.dataset,
-            prompt_name=model_config.prompt_name,
+            prompt_type=model_config.prompt_type,
             cache_dir=trainer_logging_config.cache_dir
         )
         total_samples = len(self.data_loader.dataset)
@@ -101,7 +101,7 @@ def setup_training_environment(args):
         .set_model_config(
             model_name=args.model_name,
             dataset=args.dataset,
-            prompt_name=args.prompt_name
+            prompt_type=args.prompt_type
         ) \
         .set_trainer_logging_config(
             expt_name=args.expt_name,
@@ -177,7 +177,7 @@ def print_training_environment(
 def get_debug_arguments():
     test_args = ['--model_name', 'koalpaca-12.8B',
                  '--dataset', 'KorQuAD-v1',
-                 '--prompt_name', 'A'
+                 '--prompt_type', 'A'
                  ]
     sys.argv.extend(test_args)
 

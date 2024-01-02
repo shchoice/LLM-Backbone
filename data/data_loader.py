@@ -4,9 +4,10 @@ from prompts.prompt_loader import PromptLoader
 
 
 class DataLoader:
-    def __init__(self, dataset, prompt_name, cache_dir):
+    def __init__(self, dataset, prompt_type, cache_dir):
         self.dataset = self.get_dataset(dataset=dataset)
-        self.prompt = PromptLoader.get_prompt(prompt_type=prompt_name)
+        self.prompt = PromptLoader.get_prompt(prompt_type=prompt_type)
+        self.prompt_type = prompt_type
         self.cache_dir = cache_dir
 
     def get_dataset(self, dataset):
@@ -20,9 +21,19 @@ class DataLoader:
         return self.dataset
 
     def format_to_prompt(self, data):
-        context = data['context']
-        question = data['question']
-        answers = f"{data['answers']['text'][0]}"
-        formatted_prompt = self.prompt['context_question'].format(context=context, question=question, answers=answers)
+        if self.prompt_type == 'A' or self.prompt_type == 'B':
+            context = data['context']
+            question = data['question']
+            answer = f"{data['answers']['text'][0]}"
+            formatted_prompt = self.prompt['context_question'].format(context=context, question=question, answer=answer)
+        elif self.prompt_type == 'C':
+            question = data['question']
+            answer = f"{data['answers']['text'][0]}"
+            formatted_prompt = self.prompt['text'].format(question=question, answer=answer)
+        elif self.prompt_type == 'D' or self.prompt_type == 'E':
+            context = data['context']
+            question = data['question']
+            answer = f"{data['answers']['text'][0]}"
+            formatted_prompt = self.prompt['text'].format(context=context, question=question, answer=answer)
 
         return {"input": formatted_prompt}

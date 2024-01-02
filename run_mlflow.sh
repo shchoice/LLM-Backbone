@@ -1,1 +1,3 @@
-mlflow ui
+MLFLOW_SERVER_IP="0.0.0.0"
+
+mlflow ui -h $MLFLOW_SERVER_IP

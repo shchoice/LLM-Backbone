@@ -8,7 +8,7 @@ class PromptLoader:
                     "### Context(맥락):\n{context}\n### Question(질문):\n{question}\n"
                 ),
                 "answers": (
-                    "### Answer(답변):\n{answers}"
+                    "### Answer(답변):\n{answer}"
                 )
             }
             return prompt
@@ -19,7 +19,7 @@ class PromptLoader:
                     "### Question(질문):\n{question}\n"
                 ),
                 "answers": (
-                    "### Answer(답변):\n{answers}"
+                    "### Answer(답변):\n{answer}"
                 )
             }
             return prompt

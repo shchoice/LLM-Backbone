@@ -15,7 +15,7 @@ class Arguments:
         parser.add_argument('--dataset', type=str, required=True, default='KorQuAD-v1', help='Dataset to use for finetuning')
 
         # Select a Prompt
-        parser.add_argument('--prompt_name', type=str, required=True, default='A', help='Prompt Type for Insturction Finetuning')
+        parser.add_argument('--prompt_type', type=str, required=True, default='A', help='Prompt Type for Insturction Finetuning')
 
         # About a Log
         parser.add_argument('--expt_name', type=str, default='expt', help='Experiment name for output directory')

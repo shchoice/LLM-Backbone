@@ -2,7 +2,7 @@
 MODEL_NAME="koalpaca-12.8B"             # Model name
 DATASET="KorQuAD-v1"                    # Dataset
 
-PROMPT_NAME="A"                         # Prompt Type
+PROMPT_TYPE="A"                         # Prompt Type
 
 EXPT_NAME="expt"                         # Experiment name
 CACHE_DIR=".cache"                      # Cache directory
@@ -11,17 +11,17 @@ LOGGING_DIR="logging"                   # Logging directory
 REPORT_TO="mlflow,tensorboard"          # Report the results and logs
 
 NUM_TRAIN_EPOCHS=10                     # Training epochs
-TRAIN_BATCH_SIZE=16                     # Training batch size
-EVAL_BATCH_SIZE=8                       # Evaluation batch size
+TRAIN_BATCH_SIZE=8                      # Training batch size
+EVAL_BATCH_SIZE=4                       # Evaluation batch size
 EVALUATION_STRATEGY="steps"             # Evaluation strategy
-EVAL_STEPS=100                          # Evaluation steps
-SAVE_STEPS=100                          # Save steps
-LOGGING_STEPS=100                       # Logging steps
+EVAL_STEPS=200                          # Evaluation steps
+SAVE_STEPS=200                          # Save steps
+LOGGING_STEPS=200                       # Logging steps
 LEARNING_RATE=5e-4                      # Learning rate
 LR_SCHEDULER_TYPE="cosine"              # LR scheduler type
 OPTIM="paged_adamw_8bit"                # Optimizer type
 WARMUP_RATIO=0.1                        # Warmup ratio
-WEIGHT_DECAY=0.01                       # Weight decay
+WEIGHT_DECAY=0.05                       # Weight decay
 GRADIENT_ACCUMULATION_STEPS=4           # Gradient accumulation steps
 LOAD_BEST_MODEL_AT_END=true             # Load best model at end
 FP16=true                               # Use fp16
@@ -35,7 +35,7 @@ BNB_4BIT_USE_DOUBLE_QUANT=true          # BNB 4-bit use double quantization
 
 R=8                                     # Lora attention dimension
 LORA_ALPHA=32                           # Lora alpha parameter
-LORA_DROPOUT=0.01                       # Lora dropout probability
+LORA_DROPOUT=0.05                       # Lora dropout probability
 FAN_IN_FAN_OUT=false                    # Lora fan in fan out
 BIAS="none"                             # Lora bias type
 TARGET_MODULES="query_key_value"        # Lora target modules
@@ -48,14 +48,13 @@ RETURN_OVERFLOWING_TOKENS=true          # Return overflowing tokens info
 RETURN_LENGTH=true                      # Return length of encoded inputs
 PADDING=true                            # Enable padding to max sequence length
 
-MLFLOW_TRACKING_URI="localhost"         # URI of MLFlow installed
-MLFLOW_PORT="5000"                      # Port of MLFlow installed
+MLFLOW_TRACKING_URI="http://localhost:5000"         # URI of MLFlow installed
 
 # Run the script
 python LLM_QnA_experiment_main.py \
   --model_name $MODEL_NAME \
   --dataset $DATASET \
-  --prompt_name $PROMPT_NAME \
+  --prompt_type $PROMPT_TYPE \
   --expt_name $EXPT_NAME \
   --cache_dir $CACHE_DIR \
   --output_dir $OUTPUT_DIR \
