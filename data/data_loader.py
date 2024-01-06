@@ -1,5 +1,6 @@
 from datasets import load_dataset
 
+from config import constants
 from prompts.prompt_loader import PromptLoader
 
 
@@ -11,8 +12,8 @@ class DataLoader:
         self.cache_dir = cache_dir
 
     def get_dataset(self, dataset):
-        if dataset == 'KorQuAD-v1':
-            return 'squad_kor_v1'
+        if dataset == constants.DATASET_NAME_KORQUAD_V1:
+            return constants.HF_DATASET_CARD_NAME_KORQUAD_V1
 
     def load_and_format_dataset(self):
         self.dataset = load_dataset(self.dataset, cache_dir=self.cache_dir)

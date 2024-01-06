@@ -1,13 +1,18 @@
 import os
 
 import torch
-from peft import prepare_model_for_kbit_training, LoraConfig, get_peft_model
+from peft import (
+    prepare_model_for_kbit_training,
+    LoraConfig,
+    get_peft_model
+)
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
     BitsAndBytesConfig
 )
 
+from config import constants
 from config.models.lora_config import LoraConfiguration
 from config.models.model_config import ModelConfig
 from config.models.quantization_config import QuantizationConfig
@@ -37,10 +42,10 @@ class ModelLoader:
         self.tokenizer = None
 
     def get_model(self, model_name):
-        if model_name == 'koalpaca-12.8B':
-            return 'beomi/KoAlpaca-Polyglot-12.8B'
-        elif model_name == 'llama2-7B':
-            return 'TinyPixel/Llama-2-7B-bf16-sharded'
+        if model_name == constants.MODEL_NAME_KOALPACA_POLYGLOT_12_8B:
+            return constants.HF_MODEL_CARD_NAME_KOALPACA_POLYGLOT_12_8B
+        elif model_name == constants.MODEL_NAME_LLAMA_2_7B:
+            return constants.HF_MODEL_CARD_NAME_LLAMA_2_7B
 
     def load_model(self):
         bnb_config = BitsAndBytesConfig(
