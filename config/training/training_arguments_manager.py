@@ -1,11 +1,11 @@
 from transformers import TrainingArguments
 
-from config.training.training_config import TrainingConfig
-from config.training.training_logging_config import TrainingLoggingConfig
+from config.entity.training.training_config import TrainingConfig
+from config.entity.training.training_logging_config import TrainingLoggingConfig
 from utils.directory_utils import DirectoryUtils
 
 
-class TrainingConfigManager:
+class TrainingArgumentsManager:
     def __init__(self, model_name, training_logging_config: TrainingLoggingConfig, training_config: TrainingConfig):
         self.model_name = model_name
         self.training_logging_config = training_logging_config

@@ -23,7 +23,7 @@ class Arguments:
 
         # Select a Model and Dataset
         parser.add_argument('--model_name', type=str, required=True, choices=['koalpaca-12.8B', 'llama2-7B', 'llama2-13B'], help='Model name to use for finetuning')
-        parser.add_argument('--dataset', type=str, required=True, default='KorQuAD-v1', help='Dataset to use for finetuning')
+        parser.add_argument('--dataset_path', type=str, required=True, default='/workspace/dataset_path/file_name.ext', help='Dataset to use for finetuning')
 
         # Select a Prompt
         parser.add_argument('--prompt_type', type=str, required=True, default='A', help='Prompt Type for Insturction Finetuning')
@@ -62,7 +62,7 @@ class Arguments:
 
         # For Lora Config
         parser.add_argument('--r', type=int, default=8, help='Lora attention dimension')
-        parser.add_argument('--lora_alpha', type=int, default=32, help='The alpha parameter for Lora scaling')
+        parser.add_argument('--lora_alpha', type=int, default=16, help='The alpha parameter for Lora scaling')
         parser.add_argument('--lora_dropout', type=float, default=0.05, help='The dropout probability for Lora layers')
         parser.add_argument('--fan_in_fan_out', type=str2bool, default=False, help='Set this to True if the layer to replace stores weight like (fan_in, fan_out)')
         parser.add_argument('--bias', type=str, default='none', help='Bias type for Lora. Can be \'none\', \'all\' or \'lora_only\'. If \'all\' or \'lora_only\', the corresponding biases will be updated during training. Be aware that this means that, even when disabling the adapters, the model will not produce the same output as the base model would have without adaptation')
@@ -76,6 +76,8 @@ class Arguments:
         parser.add_argument('--return_overflowing_tokens', type=str2bool, default=True, help='Return overflowing token information')
         parser.add_argument('--return_length', type=str2bool, default=True, help='Return length of the encoded inputs')
         parser.add_argument('--padding', type=str2bool, default=True, help='Enable padding to the maximum sequence length')
+        parser.add_argument('--padding_side', type=str, default='right', choices=['right', 'left'], help='The side on which the model should have padding applied')
+        parser.add_argument('--use_fast', type=str2bool, default=True, help='Use a [fast Rust-based tokenizer] if it is supported for a given model If a fast tokenizer is not available for a given model, a normal Python-based tokenizer is returned instead.')
 
         # For MLFLOW
         parser.add_argument('--mlflow_tracking_uri', type=str, default='http://localhost:5000', help='URI of MLFlow installed')

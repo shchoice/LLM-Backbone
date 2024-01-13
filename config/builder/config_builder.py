@@ -1,11 +1,11 @@
-from config.mlops.mlflow_config import MLFlowConfig
-from config.training_environment import TrainingEnvironment
-from config.models.lora_config import LoraConfiguration
-from config.models.model_config import ModelConfig
-from config.models.quantization_config import QuantizationConfig
-from config.training.tokenizer_config import TokenizerConfig
-from config.training.training_config import TrainingConfig
-from config.training.training_logging_config import TrainingLoggingConfig
+from config.entity.ml_ops.mlflow_config import MLFlowConfig
+from config.builder.training_environment import TrainingEnvironment
+from config.entity.models.lora_config import LoraConfiguration
+from config.entity.models.model_config import ModelConfig
+from config.entity.models.quantization_config import QuantizationConfig
+from config.entity.tokenizer.tokenizer_config import TokenizerConfig
+from config.entity.training.training_config import TrainingConfig
+from config.entity.training.training_logging_config import TrainingLoggingConfig
 
 
 class ConfigBuilder:

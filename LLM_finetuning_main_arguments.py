@@ -1,14 +1,14 @@
 import sys
 
 from config.arguments import Arguments
-from config.config_builder import ConfigBuilder
-from config.ml_ops.mlflow_config import MLFlowConfig
-from config.models.lora_config import LoraConfiguration
-from config.models.model_config import ModelConfig
-from config.models.quantization_config import QuantizationConfig
-from config.training.tokenizer_config import TokenizerConfig
-from config.training.training_config import TrainingConfig
-from config.training.training_logging_config import TrainingLoggingConfig
+from config.builder.config_builder import ConfigBuilder
+from config.entity.ml_ops.mlflow_config import MLFlowConfig
+from config.entity.models.lora_config import LoraConfiguration
+from config.entity.models.model_config import ModelConfig
+from config.entity.models.quantization_config import QuantizationConfig
+from config.entity.tokenizer.tokenizer_config import TokenizerConfig
+from config.entity.training.training_config import TrainingConfig
+from config.entity.training.training_logging_config import TrainingLoggingConfig
 
 
 def setup_training_environment(args):
@@ -16,7 +16,7 @@ def setup_training_environment(args):
     config_builder \
         .set_model_config(
             model_name=args.model_name,
-            dataset=args.dataset,
+            dataset_path=args.dataset_path,
             prompt_type=args.prompt_type
         ) \
         .set_trainer_logging_config(
@@ -76,7 +76,7 @@ def setup_training_environment(args):
 
 def get_debug_arguments():
     test_args = ['--model_name', 'koalpaca-12.8B',
-                 '--dataset', 'KorQuAD-v1',
+                 '--dataset_path', 'KorQuAD-v1',
                  '--prompt_type', 'A'
                  ]
     sys.argv.extend(test_args)

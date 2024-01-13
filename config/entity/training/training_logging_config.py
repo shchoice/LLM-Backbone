@@ -10,7 +10,7 @@ class TrainingLoggingConfig:
         self.report_to = report_to
 
     def __str__(self):
-        return f"TrainerLoggingConfig(" \
+        return f"TrainingLoggingConfig(" \
                f"expt_name={self.expt_name}, " \
                f"cache_dir={self.cache_dir}, " \
                f"output_dir={self.output_dir}, " \

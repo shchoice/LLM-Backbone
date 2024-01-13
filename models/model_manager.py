@@ -7,39 +7,36 @@ from peft import (
     get_peft_model
 )
 from transformers import (
-    AutoTokenizer,
     AutoModelForCausalLM,
     BitsAndBytesConfig
 )
 
 from config import constants
-from config.models.lora_config import LoraConfiguration
-from config.models.model_config import ModelConfig
-from config.models.quantization_config import QuantizationConfig
-from config.training.tokenizer_config import TokenizerConfig
-from config.training.training_config import TrainingConfig
-from config.training.training_logging_config import TrainingLoggingConfig
+from config.entity.models.lora_config import LoraConfiguration
+from config.entity.models.model_config import ModelConfig
+from config.entity.models import QuantizationConfig
+from config.entity.training.finetuning_configuration import FinetuningConfiguration
+from config.entity.training.training_config import TrainingConfig
+from config.entity.training.training_logging_config import TrainingLoggingConfig
 
 
-class ModelLoader:
-    def __init__(self, model_config: ModelConfig,
-                 trainer_logging_config: TrainingLoggingConfig,
-                 training_config: TrainingConfig,
-                 quantization_config: QuantizationConfig,
-                 lora_config: LoraConfiguration,
-                 tokenizer_config: TokenizerConfig):
-        self.model_name = self.get_model(model_config.model_name)
+class ModelManager:
+    def __init__(self, config: FinetuningConfiguration):
+        model_config: ModelConfig = config
+        trainer_logging_config: TrainingLoggingConfig = config
+        training_config: TrainingConfig  = config
+        quantization_config: QuantizationConfig = config
+        lora_config: LoraConfiguration = config
+
+        self.model = self.get_model(model_config.model_name)
         self.cache_dir = trainer_logging_config.cache_dir
 
         self.quantization_config = quantization_config
         self.lora_config = lora_config
-        self.tokenizer_config = tokenizer_config
 
         self.ddp = False
         self.gradient_accumulation_steps = training_config.gradient_accumulation_steps
         self.train_batch_size = training_config.train_batch_size
-
-        self.tokenizer = None
 
     def get_model(self, model_name):
         if model_name == constants.MODEL_NAME_KOALPACA_POLYGLOT_12_8B:
@@ -56,7 +53,7 @@ class ModelLoader:
         )
 
         model = AutoModelForCausalLM.from_pretrained(
-            self.model_name,
+            self.model,
             quantization_config=bnb_config,
             device_map=self.get_device_map(),
             cache_dir=self.cache_dir
@@ -85,26 +82,6 @@ class ModelLoader:
             print("not ddp - trying its own DataParallelism")
 
         return model
-
-    def load_tokenizer(self):
-        self.tokenizer = AutoTokenizer.from_pretrained(self.model_name, cache_dir=self.cache_dir)
-        self.tokenizer.pad_token = self.tokenizer.eos_token
-        print(f'Check pad_token, eos_token : {self.tokenizer.pad_token}, {self.tokenizer.eos_token}')
-
-        return self.tokenizer
-
-    def convert_to_inputs(self, data):
-        outputs = self.tokenizer(
-            data['input'],
-            truncation=self.tokenizer_config.truncation,
-            max_length=self.tokenizer_config.max_length,
-            return_overflowing_tokens=self.tokenizer_config.return_overflowing_tokens,
-            return_length=self.tokenizer_config.return_length,
-            padding=self.tokenizer_config.padding
-        )
-
-        return {'input_ids': outputs['input_ids']}
-
 
     @staticmethod
     def print_trainable_parameters(model):
