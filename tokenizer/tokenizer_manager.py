@@ -5,8 +5,8 @@ from transformers import AutoTokenizer
 
 from config import constants
 from config.entity.models.model_config import ModelConfig
+from config.entity.tokenizer.tokenizer_config import TokenizerConfig
 from config.entity.training.finetuning_configuration import FinetuningConfiguration
-from config.entity.tokenizer import TokenizerConfig
 from config.entity.training.training_logging_config import TrainingLoggingConfig
 
 
@@ -30,8 +30,9 @@ class TokenizerManager:
             padding_side=self.tokenizer_config.padding_side,
         )
         self.tokenizer.pad_token = self.tokenizer.eos_token
-        print(f'Check pad_token, eos_token : {self.tokenizer.pad_token}, {self.tokenizer.eos_token}')
-
+        print(
+            f'Check bos_token, pad_token, eos_tokenm unk_token : {self.tokenizer.bos_token}, '
+            f'{self.tokenizer.pad_token}, {self.tokenizer.eos_token}, {self.tokenizer.unk_token}')
         return self.tokenizer
 
     def set_model(self, model):

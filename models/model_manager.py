@@ -14,7 +14,7 @@ from transformers import (
 from config import constants
 from config.entity.models.lora_config import LoraConfiguration
 from config.entity.models.model_config import ModelConfig
-from config.entity.models import QuantizationConfig
+from config.entity.models.quantization_config import QuantizationConfig
 from config.entity.training.finetuning_configuration import FinetuningConfiguration
 from config.entity.training.training_config import TrainingConfig
 from config.entity.training.training_logging_config import TrainingLoggingConfig

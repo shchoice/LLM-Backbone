@@ -2,7 +2,7 @@ import copy
 from typing import Dict, Sequence
 
 import transformers
-from datasets import Dataset
+from torch.utils.data import Dataset
 
 import utils
 from config import constants

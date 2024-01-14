@@ -1,5 +1,5 @@
 class PromptFactory:
-    DEFAULT_PROMPT_DICT = {
+    LLAMA_PROMPT_DICT = {
         "prompt_input": (
             "Below is an instruction that describes a task, paired with an input that provides further context.\n"
             "아래는 작업을 설명하는 명령어와 추가적 맥락을 제공하는 입력이 짝을 이루는 예제입니다.\n\n"
@@ -24,6 +24,6 @@ class PromptFactory:
     @staticmethod
     def get_prompt(prompt_type):
         if prompt_type == 'default':
-            return PromptFactory.DEFAULT_PROMPT_DICT
+            return PromptFactory.LLAMA_PROMPT_DICT
         else:
             raise ValueError("Unknown prompt dictionary type")
